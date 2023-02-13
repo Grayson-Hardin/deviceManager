@@ -1,0 +1,108 @@
+import "./App.css";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import { DataGrid } from "@mui/x-data-grid";
+import Button from "@mui/material/Button";
+import { useState } from "react";
+import { deviceManager } from "./api/service";
+import { idID } from "@mui/material/locale";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+function App() {
+  const [search, setSearch] = useState();
+  const [deviceID, setDeviceID] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+
+  const submit = async () => {
+    const databaseRecords = await deviceManager();
+    setFirstName(databaseRecords.firstName);
+    setLastName(databaseRecords.lastName);
+  };
+
+  const columns = [
+    {
+      field: "id",
+      headerName: "Device ID",
+      description: "Device's ID number",
+      width: 90,
+      editable: true,
+    },
+    {
+      field: "firstName",
+      headerName: "First name",
+      description: "Employee's first name",
+      width: 150,
+      editable: true,
+    },
+
+    {
+      field: "lastName",
+      headerName: "Last name",
+      description: "Employee's last name",
+      width: 150,
+      editable: true,
+    },
+    // // {
+    //
+    // {
+    // {
+    //   field: "Comments",
+    //   headerName: "Comments",
+    //   description: "Additional comments",
+    //   editable: true,
+    //   sortable: false,
+    //   width: 160,
+    // },
+  ];
+
+  // const rows = [{ id: deviceID, lastName: lastName, firstName: firstName }];
+  function createData(id, firstName, lastName, comments) {
+    return { id, firstName, lastName, comments };
+  }
+
+  const rows = [createData(), ,];
+  return (
+    <TableContainer component={Paper}>
+      <Button
+        color="success"
+        sx={{ m: ".5rem" }}
+        variant="contained"
+        onClick={() => submit()}
+      >
+        Search
+      </Button>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>ID</TableCell>
+            <TableCell>First Name</TableCell>
+            <TableCell>Last Name</TableCell>
+            <TableCell>Comments</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow
+              key={row.name}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="right">{row.calories}</TableCell>
+              <TableCell align="right">{row.fat}</TableCell>
+              <TableCell align="right">{row.carbs}</TableCell>
+              <TableCell align="right">{row.protein}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
