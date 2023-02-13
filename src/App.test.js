@@ -3,9 +3,9 @@ import App from "./App";
 
 process.env.DEBUG_PRINT_LIMIT = 1000000;
 describe("Device Manager Component", () => {
-  it("should render Device ID", () => {
+  it("should render row ID", () => {
     render(<App />);
-    const actual = screen.getByText("Device ID");
+    const actual = screen.getByText("Row ID");
     expect(actual).toBeInTheDocument();
   });
 
@@ -18,6 +18,12 @@ describe("Device Manager Component", () => {
   it("should render Last Name", () => {
     render(<App />);
     const actual = screen.getByText("Last name");
+    expect(actual).toBeInTheDocument();
+  });
+
+  it("should render Device ID", () => {
+    render(<App />);
+    const actual = screen.getByText("Device ID);
     expect(actual).toBeInTheDocument();
   });
 
