@@ -22,20 +22,29 @@ const camelCaseKeys = (obj) => {
   } else if (_.isArray(obj)) {
     return obj.map((v) => camelCaseKeys(v));
   }
-  return _.reduce(obj, (r, v, k) => {
-    return {
-      ...r,
-      [_.camelCase(k)]: camelCaseKeys(v)
-    };
-  }, {});
+  return _.reduce(
+    obj,
+    (r, v, k) => {
+      return {
+        ...r,
+        [_.camelCase(k)]: camelCaseKeys(v),
+      };
+    },
+    {}
+  );
 };
 
 app.post("/deviceManager", async (req, res) => {
   let databaseCall = await databaseFunctions.retrieveRecords();
 
-  const translateSnakeToCamel = camelCaseKeys(databaseCall)
+  const translateSnakeToCamel = camelCaseKeys(databaseCall);
 
   res.send(translateSnakeToCamel);
+});
+
+app.post("/deleteEntry", async (req, res) => {
+  let id = req.body.id;
+  await databaseFunctions.deleteEntry(id);
 });
 app.listen(port, () => {
   console.log("API Live");

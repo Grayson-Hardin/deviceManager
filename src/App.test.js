@@ -91,4 +91,15 @@ describe("Device Manager Component", () => {
 
     expect(actual).toBeInTheDocument();
   });
+
+  it("should update results after an entry is deleted", async () => {
+    render(<App />);
+
+    userEvent.click(screen.getByLabelText("search"));
+    const actual = await screen.findByText("0");
+
+    userEvent.click(screen.getByLabelText("deleteButton"));
+
+    expect(actual).not.toBeInTheDocument();
+  });
 });
