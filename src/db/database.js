@@ -27,17 +27,12 @@ async function isEntryInDB(id) {
 
 async function retrieveRecords() {
   const client = await setUpConnection();
-  const retrieve = await client.query("SELECT * FROM devices");
+  const retrieveRecords = await client.query("SELECT * FROM devices");
 
   await client.end();
 
-  // return retrieve.rows[0];
-  return {
-    firstName: "Grayson",
-    lastName: "Hardin",
-    deviceID: "0213",
-    comments: "misc",
-  };
+  console.log(retrieveRecords.rows);
+  return retrieveRecords;
 }
 
 // async function deleteEntry(device_id) {

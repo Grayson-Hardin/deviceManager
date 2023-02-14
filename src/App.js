@@ -7,29 +7,14 @@ import { useState } from "react";
 import { deviceManager } from "./api/service";
 
 function App() {
-  const [deviceID, setDeviceID] = useState(null);
-  const [firstName, setFirstName] = useState(null);
-  const [lastName, setLastName] = useState(null);
-  const [comments, setComments] = useState(null);
+  const [rows, setRows] = useState([]);
 
   const submit = async () => {
     const databaseRecords = await deviceManager();
-    setFirstName(databaseRecords.firstName);
-    setLastName(databaseRecords.lastName);
-    setDeviceID(databaseRecords.deviceID);
-    setComments(databaseRecords.comments);
-
-    console.log(databaseRecords.length);
+    setRows(databaseRecords.rows);
   };
 
   const columns = [
-    {
-      field: "id",
-      headerName: "Row ID",
-      description: "Device's ID number",
-      width: 90,
-      editable: true,
-    },
     {
       field: "firstName",
       headerName: "First name",
@@ -47,14 +32,14 @@ function App() {
     },
 
     {
-      field: "deviceID",
+      field: "id",
       headerName: "Device ID",
       description: "Employee's last name",
       width: 150,
       editable: true,
     },
     {
-      field: "Comments",
+      field: "comments",
       headerName: "Comments",
       description: "Additional comments",
       editable: true,
@@ -63,45 +48,10 @@ function App() {
     },
   ];
 
-  let items = [
-    { lastname: "Yo", firstName: "Sup", deviceID: 123, comments: "N/A" },
-    { lastname: "Hi", firstName: "bye", deviceID: 42, comments: "N/A" },
-  ];
-  const rows = [
-    {
-      id: 1,
-      lastName: lastName,
-      firstName: firstName,
-      deviceID: deviceID,
-      Comments: comments,
-    },
-    {
-      id: 1,
-      lastName: lastName,
-      firstName: firstName,
-      deviceID: deviceID,
-      Comments: comments,
-    },
-  ];
-
-  // for (let row of items) {
-  //   console.log(row);
-  // }
-
-  // const generateRows = () => {
-  //   let counter = 0;
-  //   for (let row of items) {
-  //     const results = {
-  //       id: counter,
-  //       firstName: row,
-  //     };
-  //     return results;
-  //   }
-  // };
-
   return (
     <Box sx={{ height: 400, width: "100%" }}>
       <Button
+        aria-label="search"
         color="success"
         sx={{ m: ".5rem" }}
         variant="contained"
@@ -111,6 +61,7 @@ function App() {
       </Button>
       <DataGrid
         rows={rows}
+        columnBuffer={6}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}

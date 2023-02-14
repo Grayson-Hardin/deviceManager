@@ -5,8 +5,8 @@
 
 - [x] Create Database
 - [x] Create function to retrieve all records
-- [ ] Build front end w/ table
-- [ ] Retrieve results from backend (or simply display all onload)
+- [x] Build front end w/ table
+- [x] Retrieve results from backend (or simply display all onload)
 
 
 ### Story 2
