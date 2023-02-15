@@ -9,6 +9,7 @@ app.use(express.json());
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
@@ -34,7 +35,7 @@ const camelCaseKeys = (obj) => {
   );
 };
 
-app.post("/deviceManager", async (req, res) => {
+app.get("/deviceManager", async (req, res) => {
   let databaseCall = await databaseFunctions.retrieveRecords();
 
   const translateSnakeToCamel = camelCaseKeys(databaseCall);
@@ -42,10 +43,26 @@ app.post("/deviceManager", async (req, res) => {
   res.send(translateSnakeToCamel);
 });
 
-app.post("/deleteEntry", async (req, res) => {
+app.delete("/deleteEntry", async (req, res) => {
   let id = req.body.id;
   await databaseFunctions.deleteEntry(id);
+
+  res.status(204);
+  res.send("Deleted");
 });
+
+app.post("/addEntry", async (req, res) => {
+  await databaseFunctions.addEntry(
+    req.body.firstName,
+    req.body.lastName,
+    req.body.id,
+    req.body.comments
+  );
+
+  res.status(201);
+  res.send("Added");
+});
+
 app.listen(port, () => {
   console.log("API Live");
 });

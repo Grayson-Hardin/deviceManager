@@ -4,8 +4,16 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import { useState } from "react";
-import { deviceManager, deleteEntry } from "./api/service";
+import { deviceManager, deleteEntry, addEntry } from "./api/service";
 import DeleteIcon from "@mui/icons-material/Delete";
+
+// ----- Some questions to review -----
+
+// Refreshing page after adding / deleting (was working but isn't...)
+// Discuss how the props are obtained (lines 73-86)
+// One front end test is failing in App.js.
+// Go over the translationFunction in apiCall.js
+
 function App() {
   const [rows, setRows] = useState([]);
 
@@ -17,7 +25,13 @@ function App() {
   const handleDelete = async (id) => {
     await deleteEntry(id);
 
-    return handleSearch();
+    await handleSearch();
+  };
+
+  const handleAdd = async () => {
+    await addEntry("Frodo", "Baggins", "1", "my precious");
+
+    await handleSearch();
   };
 
   const columns = [
@@ -58,25 +72,25 @@ function App() {
       sortable: false,
       editable: false,
       renderCell: (params) => {
-        const onClick = (e) => {
+        const onClick = async (e) => {
           e.stopPropagation();
 
-          const api = params.api;
-          const thisRow = {};
-
-          api
-            .getAllColumns()
-            .filter((c) => c.field !== "__check__" && !!c)
-            .forEach(
-              (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-            );
-
-          handleDelete(thisRow.id);
+          await handleDelete(thisRow.id);
         };
+
+        const api = params.api;
+        const thisRow = {};
+
+        api
+          .getAllColumns()
+          .filter((c) => c.field !== "__check__" && !!c)
+          .forEach(
+            (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
+          );
 
         return (
           <Button
-            aria-label="deleteButton"
+            aria-label={`Delete button for ${thisRow.id}`}
             color="error"
             startIcon={<DeleteIcon />}
             onClick={onClick}
@@ -95,6 +109,15 @@ function App() {
         onClick={() => handleSearch()}
       >
         Search
+      </Button>
+      <Button
+        aria-label="add"
+        color="info"
+        sx={{ m: ".5rem" }}
+        variant="contained"
+        onClick={() => handleAdd()}
+      >
+        Add
       </Button>
 
       <DataGrid

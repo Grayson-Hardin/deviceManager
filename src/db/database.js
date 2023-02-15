@@ -35,7 +35,19 @@ async function retrieveRecords() {
 async function deleteEntry(device_id) {
   const client = await setUpConnection();
 
-  client.query(`DELETE FROM devices WHERE id = '${device_id}'`);
-  // return await client.query(`DELETE FROM devices WHERE id = '${device_id}'`);
+  const deleteEntry = await client.query(
+    `DELETE FROM devices WHERE id = '${device_id}'`
+  );
+
+  return deleteEntry;
 }
-module.exports = { retrieveRecords, isEntryInDB, deleteEntry };
+async function addEntry(firstName, lastName, deviceID, comments) {
+  const client = await setUpConnection();
+
+  const insertNewEntry = await client.query(
+    `INSERT into devices values('${firstName}', '${lastName}', '${deviceID}', '${comments}');`
+  );
+
+  return insertNewEntry;
+}
+module.exports = { retrieveRecords, isEntryInDB, deleteEntry, addEntry };

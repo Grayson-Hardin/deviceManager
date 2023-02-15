@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import App from "./App";
 import userEvent from "@testing-library/user-event";
 
@@ -96,10 +96,10 @@ describe("Device Manager Component", () => {
     render(<App />);
 
     userEvent.click(screen.getByLabelText("search"));
-    const actual = await screen.findByText("0");
+    const actual = await screen.findByText("0213");
 
-    userEvent.click(screen.getByLabelText("deleteButton"));
+    userEvent.click(screen.getByLabelText("Delete button for 0213"));
 
-    expect(actual).not.toBeInTheDocument();
+    await waitFor(() => expect(actual).not.toBeInTheDocument());
   });
 });

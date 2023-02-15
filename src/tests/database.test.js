@@ -57,6 +57,17 @@ it("should delete an entry from the database", async () => {
   expect(newRecords.rows.length).toEqual(1);
 });
 
+it("should add an entry to the database", async () => {
+  const currentRecords = await deviceFunctions.retrieveRecords();
+
+  expect(currentRecords.rows.length).toEqual(2);
+
+  await deviceFunctions.addEntry("Frodo", "Baggins", 1, "Which way Gandalf?");
+
+  const newRecords = await deviceFunctions.retrieveRecords();
+  expect(newRecords.rows.length).toEqual(3);
+});
+
 // it("should delete entry from database first example", async () => {
 //   const entireDBRecords = await client.query("SELECT * FROM devices");
 //
