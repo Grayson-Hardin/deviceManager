@@ -67,37 +67,3 @@ it("should add an entry to the database", async () => {
   const newRecords = await deviceFunctions.retrieveRecords();
   expect(newRecords.rows.length).toEqual(3);
 });
-
-// it("should delete entry from database first example", async () => {
-//   const entireDBRecords = await client.query("SELECT * FROM devices");
-//
-//   await deviceFunctions.deleteEntry("0213");
-//
-//   const newDBRecords = await client.query("SELECT * FROM devices");
-//
-//   expect(entireDBRecords.rows[0]).not.toEqual(newDBRecords.rows[0]);
-// });
-
-// it("should delete entry from database second example", async () => {
-//   const actual = await client.query("SELECT * FROM devices");
-//
-//   const entireDBRecords = await deviceFunctions.retrieveRecords();
-//
-//   expect(actual.rows[0]).toEqual(entireDBRecords);
-//
-//   await deviceFunctions.deleteEntry("0213");
-//
-//   expect(actual.rows[0]).not.toEqual(entireDBRecords);
-// });
-
-// it("should add entry to database", async () => {
-//   const actual = await client.query("SELECT * FROM devices");
-//
-//   const entireDBRecords = await deviceFunctions.retrieveRecords();
-//
-//   expect(actual.rows[0]).toEqual(entireDBRecords);
-//
-//   await deviceFunctions.addEntry();
-//
-//   expect(actual);
-// });

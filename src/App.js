@@ -7,13 +7,6 @@ import { useState } from "react";
 import { deviceManager, deleteEntry, addEntry } from "./api/service";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-// ----- Some questions to review -----
-
-// Refreshing page after adding / deleting (was working but isn't...)
-// Discuss how the props are obtained (lines 73-86)
-// One front end test is failing in App.js.
-// Go over the translationFunction in apiCall.js
-
 function App() {
   const [rows, setRows] = useState([]);
 
