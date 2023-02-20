@@ -8,11 +8,5 @@ export async function loader({ params }) {
 
 export default function Contact() {
   const contact = useLoaderData();
-  return (
-    <div id="contact">
-      <div>
-        <img key={contact.avatar} src={contact.avatar || null} />
-      </div>
-    </div>
-  );
+  // return <div id="contact"></div>;
 }

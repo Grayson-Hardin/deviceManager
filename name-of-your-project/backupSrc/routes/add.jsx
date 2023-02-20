@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import * as React from "react";
 import Paper from "@mui/material/Paper";
-import { addEntry } from "../../backupSrc/api/service";
+import { addEntry } from "../api/service";
 import { useState } from "react";
 
 export async function action({ request, params }) {

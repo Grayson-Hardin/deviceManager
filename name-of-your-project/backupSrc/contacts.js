@@ -12,7 +12,7 @@ export async function getContacts(query) {
   return contacts.sort(sortBy("last", "createdAt"));
 }
 
-export async function createContact() {
+export async function addContact() {
   await fakeNetwork();
   let id = Math.random().toString(36).substring(2, 9);
   let contact = { id, createdAt: Date.now() };
@@ -29,21 +29,10 @@ export async function getContact(id) {
   return contact ?? null;
 }
 
-export async function updateContact(id, updates) {
-  await fakeNetwork();
-  let contacts = await localforage.getItem("contacts");
-  let contact = contacts.find((contact) => contact.id === id);
-  if (!contact) throw new Error("No contact found for", id);
-  Object.assign(contact, updates);
-  await set(contacts);
-  return contact;
-}
-
 function set(contacts) {
   return localforage.setItem("contacts", contacts);
 }
 
-// fake a cache so we don't slow down stuff we've already seen
 let fakeCache = {};
 
 async function fakeNetwork(key) {

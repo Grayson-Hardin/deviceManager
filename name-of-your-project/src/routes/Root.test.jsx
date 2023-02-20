@@ -1,16 +1,17 @@
 import { render, screen, waitFor } from "@testing-library/react";
-import App from "./App";
+import Root from "../routes/Root";
 import userEvent from "@testing-library/user-event";
+import { describe, it, expect } from "vitest";
 
 describe("Device Manager Component", () => {
   it("should render First Name", () => {
-    render(<App />);
+    render(<Root />);
     const actual = screen.getByText("First name");
     expect(actual).toBeInTheDocument();
   });
 
   it("should render Last Name", async () => {
-    render(<App />);
+    render(<Root />);
     // const userEvent = screen.getByLabelText("search").click();
     await userEvent.click(screen.getByLabelText("search"));
 
@@ -19,25 +20,25 @@ describe("Device Manager Component", () => {
   });
 
   it("should render Device ID", () => {
-    render(<App />);
+    render(<Root />);
     const actual = screen.getByText("Device ID");
     expect(actual).toBeInTheDocument();
   });
 
   it("should render Comments", async () => {
-    render(<App />);
+    render(<Root />);
     const actual = await screen.findByLabelText("Comments");
     expect(actual).toBeInTheDocument();
   });
 
   it("should render No Rows", () => {
-    render(<App />);
+    render(<Root />);
     const actual = screen.getByText("No rows");
     expect(actual).toBeInTheDocument();
   });
 
   it("should render Search button", () => {
-    render(<App />);
+    render(<Root />);
 
     const actual = screen.getByText("Search");
 
@@ -45,7 +46,7 @@ describe("Device Manager Component", () => {
   });
 
   it("should render page numbers", async () => {
-    render(<App />);
+    render(<Root />);
 
     const actual = await screen.findByText("0–0 of 0");
 
@@ -53,7 +54,7 @@ describe("Device Manager Component", () => {
   });
 
   it("should return first name when search is clicked", async () => {
-    render(<App />);
+    render(<Root />);
 
     userEvent.click(screen.getByLabelText("search"));
 
@@ -63,7 +64,7 @@ describe("Device Manager Component", () => {
   });
 
   it("should return last name when search is clicked", async () => {
-    render(<App />);
+    render(<Root />);
 
     userEvent.click(screen.getByLabelText("search"));
 
@@ -73,7 +74,7 @@ describe("Device Manager Component", () => {
   });
 
   it("should return device id when search is clicked", async () => {
-    render(<App />);
+    render(<Root />);
 
     userEvent.click(screen.getByLabelText("search"));
 
@@ -83,7 +84,7 @@ describe("Device Manager Component", () => {
   });
 
   it("should return comments when search is clicked", async () => {
-    render(<App />);
+    render(<Root />);
 
     userEvent.click(screen.getByLabelText("search"));
 
@@ -93,7 +94,7 @@ describe("Device Manager Component", () => {
   });
 
   it("should update results after an entry is deleted", async () => {
-    render(<App />);
+    render(<Root />);
 
     userEvent.click(screen.getByLabelText("search"));
     const actual = await screen.findByText("0213");

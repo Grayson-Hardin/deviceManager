@@ -1,13 +1,23 @@
-import "./App.css";
-import * as React from "react";
-import Box from "@mui/material/Box";
-import { DataGrid } from "@mui/x-data-grid";
+import { Form, redirect } from "react-router-dom";
+import { getContacts, addContact } from "../contacts.js";
 import Button from "@mui/material/Button";
-import { useState } from "react";
-import { deviceManager, deleteEntry, addEntry } from "./api/service";
+import Box from "@mui/material/Box";
+import * as React from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import { useEffect, useState } from "react";
+import { deviceManager, deleteEntry } from "../api/service";
 import DeleteIcon from "@mui/icons-material/Delete";
-function App() {
+export default function Root() {
   const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    async function refreshPage() {
+      await handleSearch();
+    }
+
+    let ignore = false;
+    refreshPage();
+  }, []);
 
   const handleSearch = async () => {
     const databaseRecords = await deviceManager();
@@ -17,15 +27,8 @@ function App() {
   const handleDelete = async (id) => {
     await deleteEntry(id);
 
-    return handleSearch();
-
+    await handleSearch();
   };
-
-  // const handleAdd = async () => {
-  //   await addEntry("Frodo", "Baggins", "1", "my precious");
-  //
-  //   await handleSearch();
-  // };
 
   const columns = [
     {
@@ -65,25 +68,25 @@ function App() {
       sortable: false,
       editable: false,
       renderCell: (params) => {
-        const onClick = (e) => {
+        const onClick = async (e) => {
           e.stopPropagation();
 
-          const api = params.api;
-          const thisRow = {};
-
-          api
-            .getAllColumns()
-            .filter((c) => c.field !== "__check__" && !!c)
-            .forEach(
-              (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-            );
-
-          handleDelete(thisRow.id);
+          await handleDelete(thisRow.id);
         };
+
+        const api = params.api;
+        const thisRow = {};
+
+        api
+          .getAllColumns()
+          .filter((c) => c.field !== "__check__" && !!c)
+          .forEach(
+            (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
+          );
 
         return (
           <Button
-            aria-label="deleteButton"
+            aria-label={`Delete button for ${thisRow.id}`}
             color="error"
             startIcon={<DeleteIcon />}
             onClick={onClick}
@@ -92,26 +95,30 @@ function App() {
       },
     },
   ];
+
   return (
     <Box sx={{ height: 400, width: "100%" }}>
-      <Button
-        aria-label="search"
-        color="success"
-        sx={{ m: ".5rem" }}
-        variant="contained"
-        onClick={() => handleSearch()}
-      >
-        Search
-      </Button>
-      {/*<Button*/}
-      {/*  aria-label="add"*/}
-      {/*  color="info"*/}
-      {/*  sx={{ m: ".5rem" }}*/}
-      {/*  variant="contained"*/}
-      {/*  onClick={() => handleAdd()}*/}
-      {/*>*/}
-      {/*  Add*/}
-      {/*</Button>*/}
+      <Form method="post">
+        <Button
+          aria-label="search"
+          color="success"
+          sx={{ m: ".5rem" }}
+          variant="contained"
+          onClick={() => handleSearch()}
+        >
+          Search
+        </Button>
+
+        <Button
+          aria-label="add"
+          color="info"
+          sx={{ m: ".5rem" }}
+          variant="contained"
+          type="submit"
+        >
+          Add
+        </Button>
+      </Form>
 
       <DataGrid
         rows={rows}
@@ -126,4 +133,12 @@ function App() {
   );
 }
 
-export default App;
+export async function loader() {
+  const contacts = await getContacts();
+  return { contacts };
+}
+
+export async function action() {
+  const entry = await addContact();
+  return redirect(`/contacts/${entry.id}/edit`);
+}
