@@ -1,4 +1,4 @@
-const deviceFunctions = require("../db/database");
+const deviceFunctions = require("./database");
 const { Client } = require("pg");
 let client;
 beforeEach(async () => {
@@ -13,7 +13,7 @@ beforeEach(async () => {
   await client.connect();
 
   await client.query(`DROP TABLE if exists devices;
-    CREATE TABLE devices (firstName varchar(32), lastName varchar(32), id varchar(4), description varchar(32));
+    CREATE TABLE devices (first_name varchar(32), last_name varchar(32), id varchar(4), comments varchar(32));
     insert into devices values('Grayson', 'Hardin', '0213', 'misc');
     insert into devices values('John', 'Wick', '0', 'yeah Im back');`);
 });
@@ -67,3 +67,16 @@ it("should add an entry to the database", async () => {
   const newRecords = await deviceFunctions.retrieveRecords();
   expect(newRecords.rows.length).toEqual(3);
 });
+
+it("should update entry in the database", async  () => {
+  const currentRecords = await deviceFunctions.retrieveRecords();
+
+  expect(currentRecords.rows[0]).toEqual({first_name: 'Grayson', last_name: 'Hardin', id: '0213', comments: 'misc'});
+
+  await deviceFunctions.updateEntry()
+
+  const newRecords = await deviceFunctions.retrieveRecords();
+
+  expect(newRecords.rows[1]).toEqual({first_name: '1', last_name: '2', id: '3', comments: '4'})
+
+})

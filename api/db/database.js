@@ -50,4 +50,13 @@ async function addEntry(firstName, lastName, deviceID, comments) {
 
   return insertNewEntry;
 }
-module.exports = { retrieveRecords, isEntryInDB, deleteEntry, addEntry };
+
+
+async function updateEntry(){
+  const client = await setUpConnection();
+  const updateEntry = await client.query(
+      `UPDATE devices SET first_name='1', last_name='2', id='3', comments='4' WHERE id='0213'`
+  );
+  return updateEntry;
+}
+module.exports = { retrieveRecords, isEntryInDB, deleteEntry, addEntry, updateEntry };

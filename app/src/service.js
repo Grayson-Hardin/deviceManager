@@ -40,3 +40,21 @@ export const addEntry = async (firstName, lastName, id, comments) => {
 
   return response;
 };
+
+export const updateEntry = async (firstName, lastName, id, comments) => {
+  const body = {
+    firstName: firstName,
+    lastName: lastName,
+    id: id,
+    comments: comments,
+  };
+
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(body),
+    headers: { "Content-Type": "application/json" },
+  };
+  const response = await fetch("http://localhost:3001/devices", options);
+
+  return response;
+};

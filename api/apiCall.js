@@ -63,6 +63,15 @@ app.post("/devices", async (req, res) => {
   res.send("Added");
 });
 
+app.put("/devices", async (req, res) => {
+  let databaseCall = await databaseFunctions.updateEntry();
+
+  const translateSnakeToCamel = camelCaseKeys(databaseCall);
+
+  res.send(translateSnakeToCamel);
+});
+
+
 app.listen(port, () => {
   console.log("API Live");
 });

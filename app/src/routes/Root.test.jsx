@@ -69,6 +69,19 @@ it("should render comments", async () => {
   expect(comments).toBeInTheDocument();
 });
 
+it("should render delete", async () => {
+  const comments = await screen.findByText("Delete");
+
+  expect(comments).toBeInTheDocument();
+});
+
+it("should render edit", async () => {
+  const comments = await screen.findByText("Edit");
+
+  expect(comments).toBeInTheDocument();
+});
+
+
 it("should no rows", async () => {
   const noRows = await screen.findByText("No rows");
 
