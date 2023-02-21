@@ -99,7 +99,7 @@ export default function Add() {
 
             <Button
               aria-label="cancel"
-              type="button"
+              type="submit"
               color="error"
               sx={{ m: ".5rem" }}
               variant="contained"
