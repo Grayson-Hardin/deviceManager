@@ -1,9 +1,9 @@
-import { Form, useLoaderData, redirect } from "react-router-dom";
+import { Form, redirect } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import * as React from "react";
 import Paper from "@mui/material/Paper";
-import { addEntry } from "../api/service";
+import { addEntry } from "../service";
 import { useState } from "react";
 
 export async function action({ request, params }) {
@@ -87,6 +87,7 @@ export default function Add() {
           </label>
           <p>
             <Button
+              aria-label="add"
               type="submit"
               color="success"
               sx={{ m: ".5rem" }}
@@ -97,6 +98,7 @@ export default function Add() {
             </Button>
 
             <Button
+              aria-label="cancel"
               type="button"
               color="error"
               sx={{ m: ".5rem" }}

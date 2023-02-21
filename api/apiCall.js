@@ -1,7 +1,7 @@
 const express = require("express");
 const _ = require("lodash");
 
-const databaseFunctions = require("../db/database");
+const databaseFunctions = require("./db/database");
 
 const app = express();
 const port = 3001;

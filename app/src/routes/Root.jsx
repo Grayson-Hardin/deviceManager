@@ -1,11 +1,10 @@
 import { Form, redirect } from "react-router-dom";
-import { getContacts, addContact } from "../contacts.js";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import { deviceManager, deleteEntry } from "../api/service";
+import { deviceManager, deleteEntry } from "../service";
 import DeleteIcon from "@mui/icons-material/Delete";
 export default function Root() {
   const [rows, setRows] = useState([]);
@@ -133,12 +132,6 @@ export default function Root() {
   );
 }
 
-export async function loader() {
-  const contacts = await getContacts();
-  return { contacts };
-}
-
 export async function action() {
-  const entry = await addContact();
-  return redirect(`/contacts/${entry.id}/edit`);
+  return redirect(`/devices/add/`);
 }

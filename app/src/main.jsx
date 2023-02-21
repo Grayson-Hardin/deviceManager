@@ -2,10 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-
 import Root, { action as rootAction } from "./routes/Root.jsx";
+import Add, { action as editAction } from "./routes/Add";
 
-import Add, { action as editAction } from "../backupSrc/routes/add";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +13,7 @@ const router = createBrowserRouter([
     action: rootAction,
   },
   {
-    path: "routes/add",
+    path: "devices/add",
     element: <Add />,
     action: editAction,
   },
