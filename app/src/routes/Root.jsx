@@ -1,12 +1,18 @@
-import { Form, redirect, Link } from "react-router-dom";
+import { Form, redirect} from "react-router-dom";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import { deviceManager, deleteEntry } from "../service";
+import {deviceManager, deleteEntry} from "../service";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
+
+
+export const extractRowValues = (firstName, lastName, id, comments) => {
+  return {firstName: "Bob", lastName: "AA", id:"2", comments: "Baby steps"}
+  // return {firstName: firstName, lastName: lastName, id:id, comments: comments}
+}
 export default function Root() {
   const [rows, setRows] = useState([]);
 
@@ -29,8 +35,6 @@ export default function Root() {
 
     await handleSearch();
   };
-
-
 
   const columns = [
     {
@@ -86,6 +90,7 @@ export default function Root() {
             (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
           );
 
+        extractRowValues(thisRow.firstName, thisRow.lastName, thisRow.id, thisRow.comments)
         return (
           <Button
             aria-label={`Delete button for ${thisRow.id}`}
@@ -107,17 +112,31 @@ export default function Root() {
       sortable: false,
       width: 160,
       renderCell: (params) => {
+        const onClick = async (e) => {
+          e.stopPropagation();
+        };
+
+        const api = params.api;
+        const thisRow = {};
+
+        api
+            .getAllColumns()
+            .filter((c) => c.field !== "__check__" && !!c)
+            .forEach(
+                (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
+            )
+
+        extractRowValues(thisRow.firstName,thisRow.lastName,thisRow.id,thisRow.comments)
+
         return (
             <Button
                 aria-label="editButton"
                 color="info"
                 variant="contained"
-                href="devices/edit"
+                href={`devices/edit/${thisRow.id}`}
                 startIcon={<EditIcon />}
-
+                onClick={onClick}
             ></Button>
-
-
         );
       },
     }
@@ -163,8 +182,3 @@ export default function Root() {
 export async function action() {
   return redirect(`/devices/add/`);
 }
-
-export async function editEntryAction() {
-  return redirect(`/devices/edit/`);
-}
-

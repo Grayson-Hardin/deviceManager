@@ -1,28 +1,59 @@
-import {Form, redirect} from "react-router-dom";
+import {Form, redirect, useParams} from "react-router-dom";
 import Box from "@mui/material/Box";
 import * as React from "react";
 import Paper from "@mui/material/Paper";
-import { updateEntry } from "../service";
+import {updateEntry} from "../service";
 import Button from "@mui/material/Button";
+import {extractRowValues} from "./Root.jsx";
+import {useState} from "react";
 
+const row = extractRowValues()
+
+console.log(row.firstName)
 export async function action({ request, params }) {
     return redirect(`/`);
 }
+
+const initialValues = {
+    firstName: "",
+    lastName: "",
+    id: "",
+    comments: "",
+};
+
 export default function Edit() {
 
+    let { deviceID } = useParams();
+
+
+    const [values, setValues] = useState(initialValues);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setValues({
+            ...values,
+            [name]: value,
+        });
+    };
+
     const handleUpdate = async () => {
-        await updateEntry()
+        await updateEntry(
+            values.firstName,
+            values.lastName,
+            values.id,
+            values.comments)
     }
 
     return (
         <Box>
-            <h1>Edit</h1>
+            <h1>Edit {deviceID}</h1>
             <Paper elevation={5}>
                 <Form method="post" id="contact-form">
                     <p>
                         <span>First Name</span>
                         <input
-                            value={"Bob"}
+                            onChange={handleInputChange}
+                            placeholder={row.firstName}
                             name="firstName"
                             label="firstName"
                             type="text"
@@ -32,7 +63,8 @@ export default function Edit() {
                     <label>
                         <span>Last Name</span>
                         <input
-                            value={"Wiley"}
+                            onChange={handleInputChange}
+                            placeholder={row.lastName}
                             name="lastName"
                             label="lastName"
                             type="text"
@@ -42,7 +74,8 @@ export default function Edit() {
                     <label>
                         <span>Device ID</span>
                         <input
-                            value={"1"}
+                            onChange={handleInputChange}
+                            placeholder={row.id}
                             name="id"
                             label="id"
                             type="text"
@@ -52,7 +85,8 @@ export default function Edit() {
                     <label>
                         <span>Comments</span>
                         <textarea
-                            value={"Baby steps"}
+                            onChange={handleInputChange}
+                            placeholder={row.comments}
                             name="comments"
                             label="comments"
                             type="text"

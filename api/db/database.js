@@ -52,10 +52,10 @@ async function addEntry(firstName, lastName, deviceID, comments) {
 }
 
 
-async function updateEntry(){
+async function updateEntry(firstName, lastName, deviceID, comments){
   const client = await setUpConnection();
   const updateEntry = await client.query(
-      `UPDATE devices SET first_name='1', last_name='2', id='3', comments='4' WHERE id='0213'`
+      `UPDATE devices SET first_name='${firstName}', last_name='${lastName}', id='${deviceID}', comments='${comments}' WHERE id='0213'`
   );
   return updateEntry;
 }

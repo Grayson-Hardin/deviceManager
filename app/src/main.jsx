@@ -21,7 +21,7 @@ const router = createBrowserRouter([
     action: addAction,
   },
   {
-    path: "devices/edit",
+    path: "devices/edit/:deviceID",
     element: <Edit />,
     action: editAction,
   },

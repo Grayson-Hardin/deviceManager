@@ -64,7 +64,11 @@ app.post("/devices", async (req, res) => {
 });
 
 app.put("/devices", async (req, res) => {
-  let databaseCall = await databaseFunctions.updateEntry();
+  let databaseCall = await databaseFunctions.updateEntry(
+      req.body.firstName,
+      req.body.lastName,
+      req.body.id,
+      req.body.comments);
 
   const translateSnakeToCamel = camelCaseKeys(databaseCall);
 
