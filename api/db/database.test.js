@@ -68,15 +68,27 @@ it("should add an entry to the database", async () => {
   expect(newRecords.rows.length).toEqual(3);
 });
 
-it("should update entry in the database", async  () => {
+it("should update entry in the database", async () => {
   const currentRecords = await deviceFunctions.retrieveRecords();
 
-  expect(currentRecords.rows[0]).toEqual({first_name: 'Grayson', last_name: 'Hardin', id: '0213', comments: 'misc'});
+  const expectedId = "0213";
+  expect(
+    currentRecords.rows.find((device) => device.id === expectedId)
+  ).toEqual({
+    first_name: "Grayson",
+    last_name: "Hardin",
+    id: expectedId,
+    comments: "misc",
+  });
 
-  await deviceFunctions.updateEntry()
+  await deviceFunctions.updateEntry("First", "Last", expectedId, "comments");
 
   const newRecords = await deviceFunctions.retrieveRecords();
 
-  expect(newRecords.rows[1]).toEqual({first_name: '1', last_name: '2', id: '3', comments: '4'})
-
-})
+  expect(newRecords.rows.find((device) => device.id === expectedId)).toEqual({
+    first_name: "First",
+    last_name: "Last",
+    id: expectedId,
+    comments: "comments",
+  });
+});

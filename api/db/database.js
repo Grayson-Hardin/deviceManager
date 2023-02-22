@@ -15,7 +15,7 @@ async function setUpConnection() {
 
 async function isEntryInDB(id) {
   const client = await setUpConnection();
-  const query = await client.query(`SELECT * FROM devices WHERE id = '${id}'`);
+  const query = await client.query(`SELECT * FROM devices WHERE id = $1`, [id]);
 
   if (query.rows[0] === undefined) {
     return false;
@@ -35,9 +35,9 @@ async function retrieveRecords() {
 async function deleteEntry(device_id) {
   const client = await setUpConnection();
 
-  const deleteEntry = await client.query(
-    `DELETE FROM devices WHERE id = '${device_id}'`
-  );
+  const deleteEntry = await client.query(`DELETE FROM devices WHERE id = $1`, [
+    device_id,
+  ]);
 
   return deleteEntry;
 }
@@ -45,18 +45,25 @@ async function addEntry(firstName, lastName, deviceID, comments) {
   const client = await setUpConnection();
 
   const insertNewEntry = await client.query(
-    `INSERT into devices values('${firstName}', '${lastName}', '${deviceID}', '${comments}');`
+    `INSERT into devices values($1, $2, $3, $4);`,
+    [firstName, lastName, deviceID, comments]
   );
 
   return insertNewEntry;
 }
 
-
-async function updateEntry(firstName, lastName, deviceID, comments){
+async function updateEntry(firstName, lastName, deviceID, comments) {
   const client = await setUpConnection();
   const updateEntry = await client.query(
-      `UPDATE devices SET first_name='${firstName}', last_name='${lastName}', id='${deviceID}', comments='${comments}' WHERE id='0213'`
+    `UPDATE devices SET first_name=$1, last_name=$2, comments=$3 WHERE id=$4`,
+    [firstName, lastName, comments, deviceID]
   );
   return updateEntry;
 }
-module.exports = { retrieveRecords, isEntryInDB, deleteEntry, addEntry, updateEntry };
+module.exports = {
+  retrieveRecords,
+  isEntryInDB,
+  deleteEntry,
+  addEntry,
+  updateEntry,
+};
