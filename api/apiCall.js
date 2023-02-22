@@ -36,15 +36,24 @@ const camelCaseKeys = (obj) => {
 };
 
 app.get("/devices", async (req, res) => {
-  let databaseCall = await databaseFunctions.retrieveRecords();
+  const databaseCall = await databaseFunctions.retrieveRecords();
 
   const translateSnakeToCamel = camelCaseKeys(databaseCall);
 
   res.send(translateSnakeToCamel);
 });
 
+
+app.get("/devices/:id", async  (req, res) => {
+  const databaseCall = await databaseFunctions.retrieveById(req.params.id);
+
+  const translateSnakeToCamel = camelCaseKeys(databaseCall)
+
+  res.send(translateSnakeToCamel)
+})
+
 app.delete("/devices", async (req, res) => {
-  let id = req.body.id;
+  const id = req.body.id;
   await databaseFunctions.deleteEntry(id);
 
   res.status(204);
@@ -64,7 +73,7 @@ app.post("/devices", async (req, res) => {
 });
 
 app.put("/devices", async (req, res) => {
-  let databaseCall = await databaseFunctions.updateEntry(
+  const databaseCall = await databaseFunctions.updateEntry(
       req.body.firstName,
       req.body.lastName,
       req.body.id,

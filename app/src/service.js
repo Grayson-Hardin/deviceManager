@@ -58,3 +58,17 @@ export const updateEntry = async (firstName, lastName, id, comments) => {
 
   return response;
 };
+
+
+export const retrieveID = async (id) => {
+
+  const options = {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  };
+  const response = await fetch(`http://localhost:3001/devices/${id}`, options);
+
+  const results = await response.json();
+
+  return results;
+};

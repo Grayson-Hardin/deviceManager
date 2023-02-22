@@ -126,5 +126,7 @@ it("should return a single device when retrieveById is called", async () => {
     graysonHardin.deviceId
   );
 
-  expect(actualValue).toEqual(graysonHardin);
+  const expected = {first_name: graysonHardin.firstName, last_name: graysonHardin.lastName, id:graysonHardin.deviceId, comments: graysonHardin.comments}
+
+  expect(actualValue).toEqual(expected);
 });

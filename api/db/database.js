@@ -1,8 +1,14 @@
-async function retrieveById(deviceId) {
-  throw new Error();
-}
-
 const { Client } = require("pg");
+
+
+async function retrieveById(deviceId) {
+ const client = await setUpConnection()
+  const query = await client.query('SELECT * FROM devices WHERE id = $1', [deviceId])
+
+  return query.rows[0]
+
+
+}
 
 async function setUpConnection() {
   const client = new Client({

@@ -9,10 +9,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
 
 
-export const extractRowValues = (firstName, lastName, id, comments) => {
-  return {firstName: "Bob", lastName: "AA", id:"2", comments: "Baby steps"}
-  // return {firstName: firstName, lastName: lastName, id:id, comments: comments}
-}
 export default function Root() {
   const [rows, setRows] = useState([]);
 
@@ -21,7 +17,6 @@ export default function Root() {
       await handleSearch();
     }
 
-    let ignore = false;
     refreshPage();
   }, []);
 
@@ -42,7 +37,7 @@ export default function Root() {
       headerName: "First name",
       description: "Employee's first name",
       width: 150,
-      editable: true,
+      editable: false,
     },
 
     {
@@ -50,7 +45,8 @@ export default function Root() {
       headerName: "Last name",
       description: "Employee's last name",
       width: 150,
-      editable: true,
+      editable: false,
+
     },
 
     {
@@ -58,13 +54,13 @@ export default function Root() {
       headerName: "Device ID",
       description: "Employee's last name",
       width: 150,
-      editable: true,
+      editable: false,
     },
     {
       field: "comments",
       headerName: "Comments",
       description: "Additional comments",
-      editable: true,
+      editable: false,
       sortable: false,
       width: 160,
     },
@@ -90,7 +86,6 @@ export default function Root() {
             (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
           );
 
-        extractRowValues(thisRow.firstName, thisRow.lastName, thisRow.id, thisRow.comments)
         return (
           <Button
             aria-label={`Delete button for ${thisRow.id}`}
@@ -125,8 +120,6 @@ export default function Root() {
             .forEach(
                 (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
             )
-
-        extractRowValues(thisRow.firstName,thisRow.lastName,thisRow.id,thisRow.comments)
 
         return (
             <Button

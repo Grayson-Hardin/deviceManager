@@ -3,11 +3,25 @@ import { describe, it, expect } from "vitest";
 import * as React from "react";
 import "@testing-library/jest-dom";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
-import { render, screen } from "@testing-library/react";
+import {render, screen, waitFor} from "@testing-library/react";
 import "@testing-library/jest-dom";
+import {retrieveID} from "../service.js";
 
+
+vi.mock("../service.js");
+
+// go through and refactor tests so they are cleaned up
+const graysonHardin = {
+    firstName: "Grayson",
+    lastName: "Hardin",
+    deviceId: "0213",
+    comments: "misc",
+};
 
 beforeEach(async () => {
+
+    const entry = {firstName: graysonHardin.firstName, lastName: graysonHardin.lastName, id: graysonHardin.deviceId, comments: graysonHardin.comments}
+    retrieveID.mockResolvedValue(entry)
 
     const routes = [
         {
@@ -25,7 +39,7 @@ beforeEach(async () => {
 });
 describe("Edit Component", () => {
     it("should render edit tag", async () => {
-        const header = await screen.getByText("Edit")
+        const header = await screen.findByText(`Edit ${graysonHardin.firstName}'s Profile`)
 
         expect(header).toBeInTheDocument()
     })
@@ -58,6 +72,27 @@ describe("Edit Component", () => {
         const submitButton = await screen.findByLabelText("submit")
 
         expect(submitButton).toBeInTheDocument()
+    })
+
+
+    it("should render cancel button", async () => {
+        const submitButton = await screen.findByLabelText("cancel")
+
+        expect(submitButton).toBeInTheDocument()
+    })
+    it("should return first name, last name, id, and comments from retrievedID function", async () => {
+        const entry = {firstName: graysonHardin.firstName, lastName: graysonHardin.lastName, id: graysonHardin.deviceId, comments: graysonHardin.comments}
+
+        const firstNameInput =  screen.getByLabelText("first name")
+        const lastNameInput =  screen.getByLabelText("last name")
+        const idInput =  screen.getByLabelText("id")
+        const commentsInput =  screen.getByLabelText("comments")
+
+        await waitFor(() => expect(firstNameInput.value).toEqual(entry.firstName));
+        await waitFor(() => expect(lastNameInput.value).toEqual(entry.lastName));
+        await waitFor(() => expect(idInput.value).toEqual(entry.id));
+        await waitFor(() => expect(commentsInput.value).toEqual(entry.comments));
+
     })
 
 })
