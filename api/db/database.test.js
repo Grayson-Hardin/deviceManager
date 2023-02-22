@@ -1,6 +1,22 @@
 const deviceFunctions = require("./database");
 const { Client } = require("pg");
+
 let client;
+
+const graysonHardin = {
+  firstName: "Grayson",
+  lastName: "Hardin",
+  deviceId: "0213",
+  comments: "misc",
+};
+
+const johnWick = {
+  firstName: "John",
+  lastName: "Wick",
+  deviceId: 0,
+  comments: "yeah Im back",
+};
+
 beforeEach(async () => {
   client = new Client({
     user: "postgres",
@@ -12,10 +28,22 @@ beforeEach(async () => {
 
   await client.connect();
 
-  await client.query(`DROP TABLE if exists devices;
-    CREATE TABLE devices (first_name varchar(32), last_name varchar(32), id varchar(4), comments varchar(32));
-    insert into devices values('Grayson', 'Hardin', '0213', 'misc');
-    insert into devices values('John', 'Wick', '0', 'yeah Im back');`);
+  await client.query(
+    `DROP TABLE if exists devices;
+    CREATE TABLE devices (first_name varchar(32), last_name varchar(32), id varchar(4), comments varchar(32));`
+  );
+  await client.query("insert into devices values($1, $2, $3, $4);", [
+    graysonHardin.firstName,
+    graysonHardin.lastName,
+    graysonHardin.deviceId,
+    graysonHardin.comments,
+  ]);
+  await client.query("insert into devices values($1, $2, $3, $4);", [
+    johnWick.firstName,
+    johnWick.lastName,
+    johnWick.deviceId,
+    johnWick.comments,
+  ]);
 });
 afterAll(async () => {
   await client.end();
@@ -41,7 +69,7 @@ it("should return false if device id is not in db", async () => {
 });
 
 it("should return true if device_id is in db", async () => {
-  const actual = await deviceFunctions.isEntryInDB("0213");
+  const actual = await deviceFunctions.isEntryInDB(graysonHardin.deviceId);
 
   expect(actual).toEqual(true);
 });
@@ -71,7 +99,7 @@ it("should add an entry to the database", async () => {
 it("should update entry in the database", async () => {
   const currentRecords = await deviceFunctions.retrieveRecords();
 
-  const expectedId = "0213";
+  const expectedId = graysonHardin.deviceId;
   expect(
     currentRecords.rows.find((device) => device.id === expectedId)
   ).toEqual({
@@ -91,4 +119,12 @@ it("should update entry in the database", async () => {
     id: expectedId,
     comments: "comments",
   });
+});
+
+it("should return a single device when retrieveById is called", async () => {
+  const actualValue = await deviceFunctions.retrieveById(
+    graysonHardin.deviceId
+  );
+
+  expect(actualValue).toEqual(graysonHardin);
 });

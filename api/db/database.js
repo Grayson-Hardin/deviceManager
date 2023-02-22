@@ -1,3 +1,7 @@
+async function retrieveById(deviceId) {
+  throw new Error();
+}
+
 const { Client } = require("pg");
 
 async function setUpConnection() {
@@ -66,4 +70,5 @@ module.exports = {
   deleteEntry,
   addEntry,
   updateEntry,
+  retrieveById,
 };
