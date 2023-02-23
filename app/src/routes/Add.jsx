@@ -1,14 +1,12 @@
-import { Form, redirect } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import * as React from "react";
 import Paper from "@mui/material/Paper";
 import { addEntry } from "../service";
 import { useState } from "react";
-
-export async function action({ request, params }) {
-  return redirect(`/`);
-}
+import { useForm } from "react-hook-form";
+import "../index.css";
 
 const initialValues = {
   firstName: "",
@@ -19,6 +17,22 @@ const initialValues = {
 
 export default function Add() {
   const [values, setValues] = useState(initialValues);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const navigate = useNavigate();
+
+  const onSubmit = async () => {
+    await addEntry(
+      values.firstName,
+      values.lastName,
+      values.id,
+      values.comments
+    );
+    navigate("/");
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,64 +41,61 @@ export default function Add() {
       [name]: value,
     });
   };
-  const handleAdd = async () => {
-    await addEntry(
-      values.firstName,
-      values.lastName,
-      values.id,
-      values.comments
-    );
-  };
-
   return (
     <Box>
       <Paper elevation={5}>
-        <Form method="post" id="contact-form">
-          <p>
-            <span>First Name</span>
-            <input
-                value={values.firstName}
-                onChange={handleInputChange}
-                name="firstName"
-                label="firstName"
-                type="text"
-                id="firstName"
-            />
-          </p>
-          <label>
-            <span>Last Name</span>
-            <input
-              value={values.lastName}
-              onChange={handleInputChange}
-              name="lastName"
-              label="lastName"
-              type="text"
-              id="lastName"
-            />
-          </label>
-          <label>
-            <span>Device ID</span>
-            <input
-              values={values.id}
-              onChange={handleInputChange}
-              name="id"
-              label="id"
-              type="text"
-              id="id"
-            />
-          </label>
-          <label>
-            <span>Comments</span>
-            <textarea
-              values={values.comments}
-              onChange={handleInputChange}
-              name="comments"
-              label="comments"
-              type="text"
-              rows={6}
-              id="comments"
-            />
-          </label>
+        <Form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
+          <label>First Name</label>
+          <input
+            aria-label={"first name"}
+            name="firstName"
+            label="firstName"
+            id="firstName"
+            type="text"
+            {...register("firstName", { required: true, maxLength: 20 })}
+            onChange={handleInputChange}
+          />
+          {errors.firstName && (
+            <p className={"inputValidation"}>First Name Required</p>
+          )}
+
+          <label>Last Name</label>
+          <input
+            aria-label={"last name"}
+            name="lastName"
+            label="lastName"
+            id="lastName"
+            type="text"
+            {...register("lastName", { required: true, maxLength: 20 })}
+            onChange={handleInputChange}
+          />
+          {errors.lastName && (
+            <p className={"inputValidation"}>Last Name Required</p>
+          )}
+
+          <label>Device ID</label>
+          <input
+            aria-label={"device id"}
+            name="id"
+            label="id"
+            id="id"
+            type="text"
+            {...register("id", { required: true, maxLength: 20 })}
+            onChange={handleInputChange}
+          />
+          {errors.id && <p className={"inputValidation"}>Device ID Required</p>}
+
+          <label>Comments</label>
+          <input
+            aria-label={"comments"}
+            name="comments"
+            label="comments"
+            id="comments"
+            type="text"
+            {...register("comments", { required: false, maxLength: 20 })}
+            onChange={handleInputChange}
+          />
+
           <p>
             <Button
               aria-label="add"
@@ -92,12 +103,12 @@ export default function Add() {
               color="success"
               sx={{ m: ".5rem" }}
               variant="contained"
-              onClick={handleAdd}
             >
               Add
             </Button>
 
             <Button
+              href={"/"}
               aria-label="cancel"
               type="submit"
               color="error"
