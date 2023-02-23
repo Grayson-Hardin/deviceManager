@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Root, { action as rootAction} from "./routes/Root.jsx";
 import Add, { action as addAction } from "./routes/Add";
-import Edit, { action as editAction } from "./routes/Edit";
+import Edit from "./routes/Edit";
 
 // import Edit from "./routes/Edit.jsx";
 
@@ -23,7 +23,8 @@ const router = createBrowserRouter([
   {
     path: "devices/edit/:deviceID",
     element: <Edit />,
-    action: editAction,
+    action: "/"
+    // action: editAction,
   },
 ]);
 

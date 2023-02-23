@@ -43,12 +43,12 @@ export default function Add() {
           <p>
             <span>First Name</span>
             <input
-              value={values.firstName}
-              onChange={handleInputChange}
-              name="firstName"
-              label="firstName"
-              type="text"
-              id="firstName"
+                value={values.firstName}
+                onChange={handleInputChange}
+                name="firstName"
+                label="firstName"
+                type="text"
+                id="firstName"
             />
           </p>
           <label>
