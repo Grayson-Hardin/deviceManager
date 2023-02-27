@@ -1,13 +1,12 @@
-import { Form, redirect} from "react-router-dom";
+import { Form, redirect } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import {deviceManager, deleteEntry} from "../service";
+import { deviceManager, deleteEntry } from "../service";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from '@mui/icons-material/Edit';
-
+import EditIcon from "@mui/icons-material/Edit";
 
 export default function Root() {
   const [rows, setRows] = useState([]);
@@ -33,6 +32,13 @@ export default function Root() {
 
   const columns = [
     {
+      field: "id",
+      headerName: "ID",
+      description: "ID",
+      width: 150,
+      editable: false,
+    },
+    {
       field: "firstName",
       headerName: "First name",
       description: "Employee's first name",
@@ -46,13 +52,12 @@ export default function Root() {
       description: "Employee's last name",
       width: 150,
       editable: false,
-
     },
 
     {
-      field: "id",
+      field: "deviceId",
       headerName: "Device ID",
-      description: "Employee's last name",
+      description: "Device's ID",
       width: 150,
       editable: false,
     },
@@ -82,16 +87,13 @@ export default function Root() {
         api
           .getAllColumns()
           .filter((c) => c.field !== "__check__" && !!c)
-          .forEach(
-            (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-          );
+          .forEach((c) => (thisRow[c.field] = params.getValue(params.id, c.field)));
 
         return (
           <Button
             aria-label={`Delete button for ${thisRow.id}`}
             color="error"
             variant="contained"
-
             startIcon={<DeleteIcon />}
             onClick={onClick}
           ></Button>
@@ -115,24 +117,22 @@ export default function Root() {
         const thisRow = {};
 
         api
-            .getAllColumns()
-            .filter((c) => c.field !== "__check__" && !!c)
-            .forEach(
-                (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-            )
+          .getAllColumns()
+          .filter((c) => c.field !== "__check__" && !!c)
+          .forEach((c) => (thisRow[c.field] = params.getValue(params.id, c.field)));
 
         return (
-            <Button
-                aria-label="editButton"
-                color="info"
-                variant="contained"
-                href={`devices/edit/${thisRow.id}`}
-                startIcon={<EditIcon />}
-                onClick={onClick}
-            ></Button>
+          <Button
+            aria-label="editButton"
+            color="info"
+            variant="contained"
+            href={`devices/edit/${thisRow.id}`}
+            startIcon={<EditIcon />}
+            onClick={onClick}
+          ></Button>
         );
       },
-    }
+    },
   ];
 
   return (
@@ -148,20 +148,14 @@ export default function Root() {
           Search
         </Button>
 
-        <Button
-          aria-label="add"
-          color="info"
-          sx={{ m: ".5rem" }}
-          variant="contained"
-          type="submit"
-        >
+        <Button aria-label="add" color="info" sx={{ m: ".5rem" }} variant="contained" type="submit">
           Add
         </Button>
       </Form>
 
       <DataGrid
         rows={rows}
-        columnBuffer={6}
+        columnBuffer={7}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}

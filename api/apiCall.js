@@ -43,14 +43,13 @@ app.get("/devices", async (req, res) => {
   res.send(translateSnakeToCamel);
 });
 
-
-app.get("/devices/:id", async  (req, res) => {
+app.get("/devices/:id", async (req, res) => {
   const databaseCall = await databaseFunctions.retrieveById(req.params.id);
 
-  const translateSnakeToCamel = camelCaseKeys(databaseCall)
+  const translateSnakeToCamel = camelCaseKeys(databaseCall);
 
-  res.send(translateSnakeToCamel)
-})
+  res.send(translateSnakeToCamel);
+});
 
 app.delete("/devices", async (req, res) => {
   const id = req.body.id;
@@ -74,16 +73,17 @@ app.post("/devices", async (req, res) => {
 
 app.put("/devices", async (req, res) => {
   const databaseCall = await databaseFunctions.updateEntry(
-      req.body.firstName,
-      req.body.lastName,
-      req.body.id,
-      req.body.comments);
+    req.body.firstName,
+    req.body.lastName,
+    req.body.deviceId,
+    req.body.comments,
+    req.body.id
+  );
 
   const translateSnakeToCamel = camelCaseKeys(databaseCall);
 
   res.send(translateSnakeToCamel);
 });
-
 
 app.listen(port, () => {
   console.log("API Live");

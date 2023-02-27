@@ -23,11 +23,11 @@ export const deleteEntry = async (id) => {
   return response;
 };
 
-export const addEntry = async (firstName, lastName, id, comments) => {
+export const addEntry = async (firstName, lastName, deviceId, comments) => {
   const body = {
     firstName: firstName,
     lastName: lastName,
-    id: id,
+    deviceId: deviceId,
     comments: comments,
   };
 
@@ -41,12 +41,13 @@ export const addEntry = async (firstName, lastName, id, comments) => {
   return response;
 };
 
-export const updateEntry = async (firstName, lastName, id, comments) => {
+export const updateEntry = async (firstName, lastName, deviceId, comments, id) => {
   const body = {
     firstName: firstName,
     lastName: lastName,
-    id: id,
+    deviceId: deviceId,
     comments: comments,
+    id: id,
   };
 
   const options = {
@@ -59,9 +60,7 @@ export const updateEntry = async (firstName, lastName, id, comments) => {
   return response;
 };
 
-
 export const retrieveID = async (id) => {
-
   const options = {
     method: "GET",
     headers: { "Content-Type": "application/json" },

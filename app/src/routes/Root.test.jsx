@@ -10,12 +10,10 @@ import { deviceManager } from "../service.js";
 
 vi.mock("../service.js");
 
-const mocked_id = "1"
+const mocked_id = "23";
 
 beforeEach(async () => {
-  const entry = [
-    { firstName: "Bob", lastName: "Wiley", id:  mocked_id, comments: "N/A" },
-  ];
+  const entry = [{ firstName: "Bob", lastName: "Wiley", id: mocked_id, comments: "N/A" }];
   deviceManager.mockResolvedValue({ rows: entry });
   const routes = [
     {
@@ -80,7 +78,6 @@ it("should render edit", async () => {
 
   expect(comments).toBeInTheDocument();
 });
-
 
 it("should no rows", async () => {
   const noRows = await screen.findByText("No rows");

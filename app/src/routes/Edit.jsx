@@ -1,133 +1,80 @@
-import { Form, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import * as React from "react";
 import { retrieveID, updateEntry } from "../service";
 import Button from "@mui/material/Button";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import "../index.css";
+import { InputWithLabel } from "../common/InputWithLabel.jsx";
 
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  id: "",
-  comments: "",
-};
 export default function Edit() {
   const navigate = useNavigate();
-  const [device, setDevice] = useState(initialValues);
   const {
     register,
     handleSubmit,
+    reset,
+    getValues,
     formState: { errors },
   } = useForm();
-  let { deviceID } = useParams();
+  let { id } = useParams();
 
   const onSubmit = async () => {
-    console.log(device.firstName, device.lastName, device.id, device.comments);
-    await updateEntry(
-      device.firstName,
-      device.lastName,
-      device.id,
-      device.comments
-    );
+    const device = getValues();
+
+    await updateEntry(device.firstName, device.lastName, device.deviceId, device.comments, device.id);
     navigate("/");
   };
 
   useEffect(() => {
     async function getDevice() {
-      const response = await retrieveID(deviceID);
-      setDevice(response);
+      const response = await retrieveID(id);
+      reset(response);
     }
 
     getDevice();
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setDevice({
-      ...device,
-      [name]: value,
-    });
-  };
-
   return (
     <Box>
-      <h3>Edit {device.firstName}'s Profile</h3>
-      <Form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
-        <label>First Name</label>
-        <input
-          value={device.firstName}
-          aria-label="first name"
+      <h3>Edit {getValues().firstName}'s Profile</h3>
+      <form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
+        <InputWithLabel
+          register={register}
+          labelText="First Name"
           name="firstName"
-          label="firstName"
           type="text"
-          id="firstName"
-          {...register("firstName", { required: true, maxLength: 20 })}
-          onChange={handleInputChange}
+          validation={{ required: "First Name Required", maxLength: { value: 20, message: "Character Limit Is 20" } }}
+          errors={errors}
         />
-        <label>Last Name</label>
-        <input
-          value={device.lastName}
-          aria-label="last name"
+
+        <InputWithLabel
+          register={register}
+          labelText="Last Name"
           name="lastName"
-          label="lastName"
           type="text"
-          id="lastName"
-          {...register("lastName", { required: true, maxLength: 20 })}
-          onChange={handleInputChange}
+          validation={{ required: "Last Name Required", maxLength: { value: 20, message: "Character Limit Is 20" } }}
+          errors={errors}
         />
-        <label>Device ID</label>
 
-        <input
-          value={device.id}
-          aria-label="id"
-          name="id"
-          label="id"
+        <InputWithLabel
+          register={register}
+          labelText="Device ID"
+          name="deviceId"
           type="text"
-          id="id"
-          {...register("id", { required: false, maxLength: 10 })}
-          onChange={handleInputChange}
+          validation={{ required: "Device ID Required", maxLength: { value: 4, message: "Character Limit Is 4" } }}
+          errors={errors}
         />
-        {errors.lastName && (
-          <p className={"inputValidation"}>Last Name Required</p>
-        )}
 
-        <label>Comments</label>
-        <input
-          value={device.comments}
-          aria-label="comments"
-          name="comments"
-          label="comments"
-          type="text"
-          id="comments"
-          {...register("comments", { required: false, maxLength: 30 })}
-          onChange={handleInputChange}
-        />
-        {errors.firstName && (
-          <p className={"inputValidation"}>First Name Required</p>
-        )}
-        <Button
-          aria-label="submit"
-          type="submit"
-          color="success"
-          sx={{ m: ".5rem" }}
-          variant="contained"
-        >
+        <InputWithLabel register={register} labelText="Comments" name="comments" type="text" />
+        <Button aria-label="submit" type="submit" color="success" sx={{ m: ".5rem" }} variant="contained">
           Submit
         </Button>
 
-        <Button
-          href={"/"}
-          aria-label="cancel"
-          type="cancel"
-          color="error"
-          sx={{ m: ".5rem" }}
-          variant="contained"
-        >
+        <Button href={"/"} aria-label="cancel" type="cancel" color="error" sx={{ m: ".5rem" }} variant="contained">
           Cancel
         </Button>
-      </Form>
+      </form>
     </Box>
   );
 }
