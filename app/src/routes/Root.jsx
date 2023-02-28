@@ -32,13 +32,6 @@ export default function Root() {
 
   const columns = [
     {
-      field: "id",
-      headerName: "ID",
-      description: "ID",
-      width: 150,
-      editable: false,
-    },
-    {
       field: "firstName",
       headerName: "First name",
       description: "Employee's first name",
@@ -78,7 +71,7 @@ export default function Root() {
         const onClick = async (e) => {
           e.stopPropagation();
 
-          await handleDelete(thisRow.id);
+          await handleDelete(params.id);
         };
 
         const api = params.api;
@@ -91,7 +84,7 @@ export default function Root() {
 
         return (
           <Button
-            aria-label={`Delete button for ${thisRow.id}`}
+            aria-label={`Delete button for ${params.id}`}
             color="error"
             variant="contained"
             startIcon={<DeleteIcon />}
@@ -126,7 +119,7 @@ export default function Root() {
             aria-label="editButton"
             color="info"
             variant="contained"
-            href={`devices/edit/${thisRow.id}`}
+            href={`devices/edit/${params.id}`}
             startIcon={<EditIcon />}
             onClick={onClick}
           ></Button>
@@ -155,7 +148,7 @@ export default function Root() {
 
       <DataGrid
         rows={rows}
-        columnBuffer={7}
+        columnBuffer={6}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}

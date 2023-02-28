@@ -13,7 +13,7 @@ vi.mock("../service.js");
 const mocked_id = "23";
 
 beforeEach(async () => {
-  const entry = [{ firstName: "Bob", lastName: "Wiley", id: mocked_id, comments: "N/A" }];
+  const entry = [{ id: mocked_id, firstName: "Bob", lastName: "Wiley", deviceId: "0213", comments: "N/A" }];
   deviceManager.mockResolvedValue({ rows: entry });
   const routes = [
     {
@@ -104,7 +104,7 @@ it("should show a entry's last name", async () => {
 });
 
 it("should show a entry's device id", async () => {
-  const id = await screen.findByText(mocked_id);
+  const id = await screen.findByText("0213");
 
   expect(id).toBeInTheDocument();
 });
@@ -116,7 +116,7 @@ it("should show a entry's comments", async () => {
 });
 
 it("should show updated results after an entry is deleted", async () => {
-  const id = await screen.findByText(mocked_id);
+  const id = await screen.findByText("0213");
 
   expect(id).toBeInTheDocument();
 

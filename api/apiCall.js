@@ -63,7 +63,7 @@ app.post("/devices", async (req, res) => {
   await databaseFunctions.addEntry(
     req.body.firstName,
     req.body.lastName,
-    req.body.id,
+    req.body.deviceId,
     req.body.comments
   );
 

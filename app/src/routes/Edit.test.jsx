@@ -134,7 +134,7 @@ describe("Edit Component", () => {
     expect(getMessage).toBeInTheDocument();
   });
 
-  it("should return validation error when first name is not provided", async () => {
+  it("should return validation error when last name is not provided", async () => {
     const entry = {
       firstName: "Grayson",
       lastName: "",
@@ -153,7 +153,7 @@ describe("Edit Component", () => {
     expect(getMessage).toBeInTheDocument();
   });
 
-  it("should return validation error when first name is not provided", async () => {
+  it("should return validation error when device id is not provided", async () => {
     const entry = {
       firstName: "Grayson",
       lastName: "Hardin",
@@ -168,6 +168,48 @@ describe("Edit Component", () => {
     await userEvent.click(screen.getByLabelText("submit"));
 
     const getMessage = screen.getByText("Device ID Required");
+
+    expect(getMessage).toBeInTheDocument();
+  });
+
+  it("should return validation error when first name is above character limit", async () => {
+    render(<RouterProvider router={router} />);
+
+    const firstName = "thisNameIsAboveTheMinimumCharacterLimit";
+
+    await userEvent.type(screen.getByLabelText("First Name"), firstName);
+
+    await userEvent.click(screen.getByLabelText("submit"));
+
+    const getMessage = screen.getByText("Character Limit Is 20");
+
+    expect(getMessage).toBeInTheDocument();
+  });
+
+  it("should return validation error when last name is above character limit", async () => {
+    render(<RouterProvider router={router} />);
+
+    const lastName = "thisNameIsAboveTheMinimumCharacterLimit";
+
+    await userEvent.type(screen.getByLabelText("Last Name"), lastName);
+
+    await userEvent.click(screen.getByLabelText("submit"));
+
+    const getMessage = screen.getByText("Character Limit Is 20");
+
+    expect(getMessage).toBeInTheDocument();
+  });
+
+  it("should return validation error when device id is above character limit", async () => {
+    render(<RouterProvider router={router} />);
+
+    const deviceID = "12345";
+
+    await userEvent.type(screen.getByLabelText("Device ID"), deviceID);
+
+    await userEvent.click(screen.getByLabelText("submit"));
+
+    const getMessage = screen.getByText("Character Limit Is 4");
 
     expect(getMessage).toBeInTheDocument();
   });

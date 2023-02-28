@@ -1,124 +1,72 @@
-import { Form, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import * as React from "react";
 import Paper from "@mui/material/Paper";
 import { addEntry } from "../service";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import "../index.css";
-
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  id: "",
-  comments: "",
-};
+import { InputWithLabel } from "../common/InputWithLabel.jsx";
 
 export default function Add() {
-  const [values, setValues] = useState(initialValues);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm();
-  const navigate = useNavigate();
 
   const onSubmit = async () => {
-    await addEntry(
-      values.firstName,
-      values.lastName,
-      values.id,
-      values.comments
-    );
+    let device = getValues();
+
+    await addEntry(device.firstName, device.lastName, device.deviceId, device.comments);
     navigate("/");
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
-  };
   return (
     <Box>
       <Paper elevation={5}>
-        <Form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
-          <label>First Name</label>
-          <input
-            aria-label={"first name"}
+        <form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
+          <InputWithLabel
+            register={register}
+            labelText="First Name"
             name="firstName"
-            label="firstName"
-            id="firstName"
             type="text"
-            {...register("firstName", { required: true, maxLength: 20 })}
-            onChange={handleInputChange}
+            errors={errors}
+            validation={{ required: "First Name Required", maxLength: { value: 20, message: "Character Limit Is 20" } }}
           />
-          {errors.firstName && (
-            <p className={"inputValidation"}>First Name Required</p>
-          )}
 
-          <label>Last Name</label>
-          <input
-            aria-label={"last name"}
+          <InputWithLabel
+            register={register}
+            labelText="Last Name"
             name="lastName"
-            label="lastName"
-            id="lastName"
             type="text"
-            {...register("lastName", { required: true, maxLength: 20 })}
-            onChange={handleInputChange}
-          />
-          {errors.lastName && (
-            <p className={"inputValidation"}>Last Name Required</p>
-          )}
-
-          <label>Device ID</label>
-          <input
-            aria-label={"device id"}
-            name="id"
-            label="id"
-            id="id"
-            type="text"
-            {...register("id", { required: true, maxLength: 20 })}
-            onChange={handleInputChange}
-          />
-          {errors.id && <p className={"inputValidation"}>Device ID Required</p>}
-
-          <label>Comments</label>
-          <input
-            aria-label={"comments"}
-            name="comments"
-            label="comments"
-            id="comments"
-            type="text"
-            {...register("comments", { required: false, maxLength: 20 })}
-            onChange={handleInputChange}
+            errors={errors}
+            validation={{ required: "Last Name Required", maxLength: { value: 20, message: "Character Limit Is 20" } }}
           />
 
-          <p>
-            <Button
-              aria-label="add"
-              type="submit"
-              color="success"
-              sx={{ m: ".5rem" }}
-              variant="contained"
-            >
+          <InputWithLabel
+            register={register}
+            labelText="Device ID"
+            name="deviceId"
+            type="text"
+            errors={errors}
+            validation={{ required: "Device ID Required", maxLength: { value: 4, message: "Character Limit Is 4" } }}
+          />
+
+          <InputWithLabel register={register} labelText="Comments" name="comments" type="text" errors={errors} />
+
+          <div>
+            <Button aria-label="add" type="submit" color="success" sx={{ m: ".5rem" }} variant="contained">
               Add
             </Button>
 
-            <Button
-              href={"/"}
-              aria-label="cancel"
-              type="submit"
-              color="error"
-              sx={{ m: ".5rem" }}
-              variant="contained"
-            >
+            <Button href={"/"} aria-label="cancel" type="submit" color="error" sx={{ m: ".5rem" }} variant="contained">
               Cancel
             </Button>
-          </p>
-        </Form>
+          </div>
+        </form>
       </Paper>
     </Box>
   );

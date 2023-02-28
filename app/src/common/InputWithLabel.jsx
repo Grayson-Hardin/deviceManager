@@ -1,6 +1,4 @@
 import "../index.css";
-
-// property assessors
 export function InputWithLabel(props) {
   return (
     <>
@@ -18,5 +16,3 @@ export function InputWithLabel(props) {
     </>
   );
 }
-
-//  fix remainding tests, and work on addd.
