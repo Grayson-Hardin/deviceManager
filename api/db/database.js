@@ -62,7 +62,6 @@ async function addEntry(firstName, lastName, deviceID, comments) {
 }
 
 async function updateEntry(firstName, lastName, deviceID, comments, id) {
-  console.log("this is the update function", deviceID);
   const client = await setUpConnection();
   const updateEntry = await client.query(
     `UPDATE devices SET first_name=$1, last_name=$2, device_id=$3,comments=$4 WHERE id=$5`,

@@ -7,7 +7,6 @@ import { addEntry } from "../service";
 import { useForm } from "react-hook-form";
 import "../index.css";
 import { InputWithLabel } from "../common/InputWithLabel.jsx";
-
 export default function Add() {
   const navigate = useNavigate();
   const {
@@ -25,7 +24,7 @@ export default function Add() {
   };
 
   return (
-    <Box>
+    <Box className={"container"}>
       <Paper elevation={5}>
         <form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
           <InputWithLabel
@@ -34,7 +33,10 @@ export default function Add() {
             name="firstName"
             type="text"
             errors={errors}
-            validation={{ required: "First Name Required", maxLength: { value: 20, message: "Character Limit Is 20" } }}
+            validation={{
+              required: "First Name Required",
+              maxLength: { value: 20, message: "Character Limit Is 20" },
+            }}
           />
 
           <InputWithLabel
@@ -43,7 +45,10 @@ export default function Add() {
             name="lastName"
             type="text"
             errors={errors}
-            validation={{ required: "Last Name Required", maxLength: { value: 20, message: "Character Limit Is 20" } }}
+            validation={{
+              required: "Last Name Required",
+              maxLength: { value: 20, message: "Character Limit Is 20" },
+            }}
           />
 
           <InputWithLabel
@@ -52,12 +57,14 @@ export default function Add() {
             name="deviceId"
             type="text"
             errors={errors}
-            validation={{ required: "Device ID Required", maxLength: { value: 4, message: "Character Limit Is 4" } }}
+            validation={{
+              required: "Device ID Required",
+              maxLength: { value: 4, message: "Character Limit Is 4" },
+            }}
           />
 
           <InputWithLabel register={register} labelText="Comments" name="comments" type="text" errors={errors} />
-
-          <div>
+          <div className={"buttons"}>
             <Button aria-label="add" type="submit" color="success" sx={{ m: ".5rem" }} variant="contained">
               Add
             </Button>
