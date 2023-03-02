@@ -1,12 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import * as React from "react";
-import { retrieveID, updateEntry } from "../service";
+import { retrieveID, updateEntry, viewAllPersons } from "../service";
 import Button from "@mui/material/Button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import "../index.css";
 import { InputWithLabel } from "../common/InputWithLabel.jsx";
+import { Autocomplete, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 
 export default function Edit() {
   const navigate = useNavigate();

@@ -43,6 +43,18 @@ it("should render add", async () => {
   expect(add).toBeInTheDocument();
 });
 
+it("should render add Person", async () => {
+  const addPersonButton = await screen.findByLabelText("addPerson");
+
+  expect(addPersonButton).toBeInTheDocument();
+});
+
+it("should render  view Persons", async () => {
+  const addPersonButton = await screen.findByLabelText("viewPersons");
+
+  expect(addPersonButton).toBeInTheDocument();
+});
+
 it("should render first name", async () => {
   const firstName = await screen.findByText("First name");
 
@@ -67,6 +79,12 @@ it("should render comments", async () => {
   expect(comments).toBeInTheDocument();
 });
 
+it("should render the actual comments", async () => {
+  const comments = await screen.findByText("N/A");
+
+  expect(comments).toBeInTheDocument();
+});
+
 it("should render delete", async () => {
   const comments = await screen.findByText("Delete");
 
@@ -74,9 +92,9 @@ it("should render delete", async () => {
 });
 
 it("should render edit", async () => {
-  const comments = await screen.findByText("Edit");
+  const edit = await screen.findByText("Edit");
 
-  expect(comments).toBeInTheDocument();
+  expect(edit).toBeInTheDocument();
 });
 
 it("should no rows", async () => {

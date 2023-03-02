@@ -9,6 +9,7 @@ const graysonHardin = {
   lastName: "Hardin",
   deviceId: "0213",
   comments: "misc",
+  person_id: 1,
 };
 
 const johnWick = {
@@ -31,26 +32,31 @@ beforeEach(async () => {
   await client.connect();
 
   await client.query(
-    `DROP TABLE if exists devices;
-    CREATE TABLE devices (id serial, first_name varchar(32), last_name varchar(32), device_id varchar(4), comments varchar(32));`
+    `DROP TABLE if exists devices cascade;
+    CREATE TABLE devices (id serial PRIMARY KEY, device_id varchar(4), comments varchar(32), person_id integer, CONSTRAINT fk_person FOREIGN KEY(person_id) REFERENCES  persons(person_id));`
+  );
+
+  await client.query(
+    "insert into devices (device_id, comments, person_id) values($1, $2, (SELECT person_id FROM persons as p WHERE p.last_name  = 'Hardin'));",
+    [graysonHardin.deviceId, graysonHardin.comments]
+  );
+
+  await client.query(
+    "insert into devices (device_id, comments, person_id) values($1, $2, (SELECT person_id FROM persons as p WHERE p.last_name  = 'Wick'));",
+    [johnWick.deviceId, johnWick.comments]
+  );
+
+  await client.query(
+    `DROP TABLE if exists persons cascade;
+    CREATE TABLE persons (person_id serial PRIMARY KEY , first_name varchar(32), last_name varchar(32), id serial);`
   );
   await client.query(
-    "insert into devices (first_name, last_name, device_id, comments) values($1, $2, $3, $4);",
-    [
-      graysonHardin.firstName,
-      graysonHardin.lastName,
-      graysonHardin.deviceId,
-      graysonHardin.comments,
-    ]
+    "insert into persons (first_name, last_name) values($1, $2);",
+    [graysonHardin.firstName, graysonHardin.lastName]
   );
   await client.query(
-    "insert into devices (first_name, last_name, device_id, comments) values($1, $2, $3, $4);",
-    [
-      johnWick.firstName,
-      johnWick.lastName,
-      johnWick.deviceId,
-      johnWick.comments,
-    ]
+    "insert into persons (first_name, last_name) values($1, $2);",
+    [johnWick.firstName, johnWick.lastName]
   );
 });
 afterAll(async () => {
@@ -58,7 +64,9 @@ afterAll(async () => {
 });
 
 it("should return all records", async () => {
-  const entireDBRecords = await client.query("SELECT * FROM devices");
+  const entireDBRecords = await client.query(
+    "SELECT p.first_name, p.last_name, device_id, comments, d.id from persons as p JOIN devices as d ON p.person_id = d.person_id"
+  );
 
   const actual = await deviceFunctions.retrieveRecords();
 
@@ -133,6 +141,7 @@ it("should return a single device when retrieveById is called", async () => {
     last_name: graysonHardin.lastName,
     device_id: graysonHardin.deviceId,
     comments: graysonHardin.comments,
+    person_id: graysonHardin.person_id,
   };
 
   expect(actualValue).toEqual(expected);

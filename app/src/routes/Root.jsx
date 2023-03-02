@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { deviceManager, deleteEntry } from "../service";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { Autocomplete, TextField } from "@mui/material";
 
 export default function Root() {
   const [rows, setRows] = useState([]);
@@ -142,13 +143,35 @@ export default function Root() {
         </Button>
 
         <Button aria-label="add" color="info" sx={{ m: ".5rem" }} variant="contained" type="submit">
-          Add
+          Add Entry
+        </Button>
+
+        <Button
+          href={`devices/person/`}
+          aria-label="addPerson"
+          color="warning"
+          sx={{ m: ".5rem" }}
+          variant="contained"
+          type="submit"
+        >
+          Add Person
+        </Button>
+
+        <Button
+          href={`devices/viewPersons/`}
+          aria-label="viewPersons"
+          color="warning"
+          sx={{ m: ".5rem" }}
+          variant="contained"
+          type="submit"
+        >
+          View Persons
         </Button>
       </Form>
 
       <DataGrid
         rows={rows}
-        columnBuffer={6}
+        columnBuffer={7}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}

@@ -2,6 +2,7 @@ const express = require("express");
 const _ = require("lodash");
 
 const databaseFunctions = require("./db/database");
+const personDatabaseFunctions = require("./db/personDatabase");
 
 const app = express();
 const port = 3001;
@@ -15,6 +16,14 @@ app.use(function (req, res, next) {
     "Origin, X-Requested-With, Content-Type, Accept"
   );
   next();
+});
+
+app.get("/devices", async (req, res) => {
+  const databaseCall = await databaseFunctions.retrieveRecords();
+
+  const translateSnakeToCamel = camelCaseKeys(databaseCall);
+
+  res.send(translateSnakeToCamel);
 });
 
 const camelCaseKeys = (obj) => {
@@ -35,8 +44,8 @@ const camelCaseKeys = (obj) => {
   );
 };
 
-app.get("/devices", async (req, res) => {
-  const databaseCall = await databaseFunctions.retrieveRecords();
+app.get("/devices/persons", async (req, res) => {
+  const databaseCall = await personDatabaseFunctions.retrievePersonRecords();
 
   const translateSnakeToCamel = camelCaseKeys(databaseCall);
 
@@ -69,6 +78,16 @@ app.post("/devices", async (req, res) => {
 
   res.status(201);
   res.send("Added");
+});
+
+app.post("/devices/person", async (req, res) => {
+  await personDatabaseFunctions.addPerson(
+    req.body.firstName,
+    req.body.lastName
+  );
+
+  res.status(201);
+  res.send("Added Person");
 });
 
 app.put("/devices", async (req, res) => {
