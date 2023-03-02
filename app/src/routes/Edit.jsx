@@ -10,6 +10,8 @@ import { InputWithLabel } from "../common/InputWithLabel.jsx";
 import { Autocomplete, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 
 export default function Edit() {
+  const [person, setPerson] = useState([]);
+
   const navigate = useNavigate();
   const {
     register,
@@ -27,10 +29,23 @@ export default function Edit() {
     navigate("/");
   };
 
+  const getPersons = async () => {
+    const persons = await viewAllPersons();
+
+    let arrayOfNames = [];
+    for (let i = 0; i < persons.rows.length; i++) {
+      arrayOfNames.push({ label: `${persons.rows[i].firstName} ` + ` ${persons.rows[i].lastName}` });
+    }
+
+    setPerson(arrayOfNames);
+    return persons;
+  };
+
   useEffect(() => {
     async function getDevice() {
       const response = await retrieveID(id);
       reset(response);
+      getPersons();
     }
 
     getDevice();
@@ -40,6 +55,13 @@ export default function Edit() {
     <Box>
       <h3>Edit {getValues().firstName}'s Profile</h3>
       <form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={person}
+          sx={{ width: 300 }}
+          renderInput={(params) => <TextField {...params} label="Select Person" />}
+        />
         <InputWithLabel
           register={register}
           labelText="First Name"
