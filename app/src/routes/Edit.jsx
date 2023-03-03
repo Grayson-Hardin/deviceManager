@@ -1,13 +1,19 @@
 import { useParams, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import * as React from "react";
-import { retrieveID, updateEntry, viewAllPersons } from "../service";
+import { retrieveID, updateEntry } from "../service";
+import { viewAllPersons } from "../personService";
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import "../index.css";
 import { InputWithLabel } from "../common/InputWithLabel.jsx";
-import { Autocomplete, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
+import { Controller } from "react-hook-form";
+
+// 1. Had to include an ID on devices because the datagrid requires unique IDs
+// 2. When a person is deleted, it automatically deletes the row in devices (because of the FK constraint)
+// 3. The dropdown returns the first name and last name... best way to splice?
 
 export default function Edit() {
   const [person, setPerson] = useState([]);
@@ -18,6 +24,7 @@ export default function Edit() {
     handleSubmit,
     reset,
     getValues,
+    control,
     formState: { errors },
   } = useForm();
   let { id } = useParams();
@@ -25,21 +32,23 @@ export default function Edit() {
   const onSubmit = async () => {
     const device = getValues();
 
-    await updateEntry(device.firstName, device.lastName, device.deviceId, device.comments, device.id);
+    await updateEntry(device.personId, device.deviceId, device.comments, device.id);
     navigate("/");
   };
 
   const getPersons = async () => {
     const persons = await viewAllPersons();
 
-    let arrayOfNames = [];
-    for (let i = 0; i < persons.rows.length; i++) {
-      arrayOfNames.push({ label: `${persons.rows[i].firstName} ` + ` ${persons.rows[i].lastName}` });
-    }
+    const personOptions = persons.rows.map((person) => ({
+      label: `${person.firstName} ` + ` ${person.lastName}`,
+      id: person.id,
+    }));
 
-    setPerson(arrayOfNames);
+    setPerson(personOptions);
     return persons;
   };
+
+  console.log(getValues());
 
   useEffect(() => {
     async function getDevice() {
@@ -55,29 +64,21 @@ export default function Edit() {
     <Box>
       <h3>Edit {getValues().firstName}'s Profile</h3>
       <form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
-        <Autocomplete
-          disablePortal
-          id="combo-box-demo"
-          options={person}
-          sx={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} label="Select Person" />}
-        />
-        <InputWithLabel
-          register={register}
-          labelText="First Name"
-          name="firstName"
-          type="text"
-          validation={{ required: "First Name Required", maxLength: { value: 20, message: "Character Limit Is 20" } }}
-          errors={errors}
-        />
-
-        <InputWithLabel
-          register={register}
-          labelText="Last Name"
-          name="lastName"
-          type="text"
-          validation={{ required: "Last Name Required", maxLength: { value: 20, message: "Character Limit Is 20" } }}
-          errors={errors}
+        <Controller
+          render={(props) => (
+            <Autocomplete
+              {...props}
+              onChange={(e, data) => props.onChange(data)}
+              error={errors}
+              disablePortal
+              id="combo-box-demo"
+              options={person}
+              sx={{ width: 300 }}
+              renderInput={(params) => <TextField {...params} label="Select Person" />}
+            />
+          )}
+          name="personId"
+          control={control}
         />
 
         <InputWithLabel

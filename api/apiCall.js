@@ -92,8 +92,7 @@ app.post("/devices/person", async (req, res) => {
 
 app.put("/devices", async (req, res) => {
   const databaseCall = await databaseFunctions.updateEntry(
-    req.body.firstName,
-    req.body.lastName,
+    req.body.personId,
     req.body.deviceId,
     req.body.comments,
     req.body.id

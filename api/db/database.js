@@ -48,7 +48,7 @@ async function addEntry(firstName, lastName, deviceID, comments) {
   const client = await setupDatabaseFunctions.setUpConnection();
 
   await client.query(
-    `INSERT into devices (device_id, comments, person_id) values($1, $2,(SELECT person_id FROM persons as p WHERE p.last_name  = 'Hardin'));`,
+    `INSERT into devices (device_id, comments) values($1, $2,(SELECT person_id FROM persons as p WHERE p.last_name  = 'Hardin'));`,
     [deviceID, comments]
   );
 
@@ -60,17 +60,12 @@ async function addEntry(firstName, lastName, deviceID, comments) {
   await client.end();
 }
 
-async function updateEntry(firstName, lastName, deviceID, comments, id) {
+async function updateEntry(personId, deviceID, comments, id) {
   const client = await setupDatabaseFunctions.setUpConnection();
 
   await client.query(
-    `UPDATE devices SET device_id=$1,comments=$2 WHERE id=$3`,
-    [deviceID, comments, id]
-  );
-
-  await client.query(
-    `UPDATE persons SET first_name=$1, last_name=$2 WHERE id=$3`,
-    [firstName, lastName, id]
+    `UPDATE devices SET device_id=$1, comments=$2, person_id=$3 WHERE id=$4`,
+    [deviceID, comments, personId, id]
   );
 
   await client.end();

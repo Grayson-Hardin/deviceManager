@@ -4,7 +4,8 @@ import Box from "@mui/material/Box";
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import { viewAllPersons } from "../service";
+import { deletePerson, viewAllPersons } from "..//personService";
+import DeleteIcon from "@mui/icons-material/Delete.js";
 
 export default function ViewPersons() {
   const [rows, setRows] = useState([]);
@@ -22,6 +23,12 @@ export default function ViewPersons() {
     setRows(databaseRecords.rows);
   };
 
+  const handleDelete = async (id) => {
+    await deletePerson(id);
+
+    await handleSearch();
+  };
+
   const columns = [
     {
       field: "firstName",
@@ -37,6 +44,37 @@ export default function ViewPersons() {
       description: "Employee's last name",
       width: 150,
       editable: false,
+    },
+    {
+      field: "action",
+      headerName: "Delete",
+      sortable: false,
+      editable: false,
+      renderCell: (params) => {
+        const onClick = async (e) => {
+          e.stopPropagation();
+
+          await handleDelete(params.id);
+        };
+
+        const api = params.api;
+        const thisRow = {};
+
+        api
+          .getAllColumns()
+          .filter((c) => c.field !== "__check__" && !!c)
+          .forEach((c) => (thisRow[c.field] = params.getValue(params.id, c.field)));
+
+        return (
+          <Button
+            aria-label={`Delete button for ${params.id}`}
+            color="error"
+            variant="contained"
+            startIcon={<DeleteIcon />}
+            onClick={onClick}
+          ></Button>
+        );
+      },
     },
   ];
 

@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { deviceManager, deleteEntry } from "../service";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Autocomplete, TextField } from "@mui/material";
 
 export default function Root() {
   const [rows, setRows] = useState([]);

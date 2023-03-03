@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { addPerson } from "../service.js";
+import { addPerson } from "../personService";
 
 // Should the tables be joined on ID or device ID?
 // What happens if a person is deleted but not the device...the serial ID would be out of sync

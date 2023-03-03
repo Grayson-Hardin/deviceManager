@@ -74,10 +74,22 @@ it("should add a person to the person table in the database", async () => {
   expect(newPersonRecords.rows.length).toEqual(3);
 });
 
-it("should return all person ecords", async () => {
+it("should return all person records", async () => {
   const allPersonRecords = await client.query("SELECT * FROM persons");
 
   const actual = await deviceFunctions.retrievePersonRecords();
 
   expect(actual).toEqual(allPersonRecords);
+});
+
+it("should delete an entry from the person database", async () => {
+  const allPersonRecords = await client.query("SELECT * FROM persons");
+
+  expect(allPersonRecords.rows.length).toEqual(2);
+
+  await deviceFunctions.deletePerson(1);
+
+  const newPersonRecords = await client.query("SELECT * FROM persons");
+
+  expect(newPersonRecords.rows.length).toEqual(1);
 });

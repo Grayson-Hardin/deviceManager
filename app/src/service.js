@@ -9,17 +9,6 @@ export const deviceManager = async () => {
   return results;
 };
 
-export const viewAllPersons = async () => {
-  const options = {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  };
-
-  const response = await fetch("http://localhost:3001/devices/persons", options);
-  const results = await response.json();
-
-  return results;
-};
 export const deleteEntry = async (id) => {
   const body = { id: id };
 
@@ -51,26 +40,9 @@ export const addEntry = async (firstName, lastName, deviceId, comments) => {
   return response;
 };
 
-export const addPerson = async (firstName, lastName) => {
+export const updateEntry = async (personId, deviceId, comments, id) => {
   const body = {
-    firstName: firstName,
-    lastName: lastName,
-  };
-
-  const options = {
-    method: "POST",
-    body: JSON.stringify(body),
-    headers: { "Content-Type": "application/json" },
-  };
-  const response = await fetch("http://localhost:3001/devices/person", options);
-
-  return response;
-};
-
-export const updateEntry = async (firstName, lastName, deviceId, comments, id) => {
-  const body = {
-    firstName: firstName,
-    lastName: lastName,
+    personId: personId,
     deviceId: deviceId,
     comments: comments,
     id: id,
